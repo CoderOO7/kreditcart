@@ -1,6 +1,8 @@
 package com.kreditcart.productCatalogue.Controllers;
 
+import com.kreditcart.productCatalogue.Clients.FakeStore.Dtos.FakeStoreProductDto;
 import com.kreditcart.productCatalogue.Dtos.ProductDto;
+import com.kreditcart.productCatalogue.Models.Category;
 import com.kreditcart.productCatalogue.Models.Product;
 import com.kreditcart.productCatalogue.Services.IProductService;
 import org.springframework.http.HttpStatus;
@@ -45,7 +47,8 @@ public class ProductController {
     @PostMapping("")
     public ResponseEntity<Product> createProduct(@RequestBody ProductDto productDto) {
         try {
-            Product product = this.productService.createProduct(productDto);
+            Product payloads = this.getProductFromProductDto(productDto);
+            Product product = this.productService.createProduct(payloads);
             return new ResponseEntity<>(product, HttpStatus.OK);
         }catch (Exception exception) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -53,7 +56,28 @@ public class ProductController {
     }
 
     @PatchMapping("{id}")
-    public String updateProduct(@RequestBody ProductDto productDto, @PathVariable("id") String id) {
-        return "update Product with id " + id + "----" + productDto;
+    public ResponseEntity<Product> updateProduct(@RequestBody ProductDto productDto, @PathVariable("id") Long id) {
+//        try{
+            Product payloads = this.getProductFromProductDto(productDto);
+            Product product = this.productService.updateProduct(id, payloads);
+            return new ResponseEntity<>(product, HttpStatus.OK);
+//        }catch (Exception exception) {
+//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+    }
+
+    private Product getProductFromProductDto(ProductDto productDto) {
+        Product product = new Product();
+        product.setId(productDto.getId());
+        product.setTitle(productDto.getTitle());
+        product.setDescription(productDto.getDescription());
+        product.setPrice(productDto.getPrice());
+        product.setImageUrl(productDto.getImage());
+
+//        Category category = new Category();
+//        category.setName(productDto.getCategory());
+//        product.setCategory(category);
+
+        return product;
     }
 }
