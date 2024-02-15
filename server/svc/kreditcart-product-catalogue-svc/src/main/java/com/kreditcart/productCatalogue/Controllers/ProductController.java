@@ -40,7 +40,7 @@ public class ProductController {
             Product product = this.productService.getProduct(id);
             return new ResponseEntity<>(product, HttpStatus.OK);
         }catch (Exception exception) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            throw exception;
         }
     }
 
@@ -57,13 +57,13 @@ public class ProductController {
 
     @PatchMapping("{id}")
     public ResponseEntity<Product> updateProduct(@RequestBody ProductDto productDto, @PathVariable("id") Long id) {
-//        try{
+        try{
             Product payloads = this.getProductFromProductDto(productDto);
             Product product = this.productService.updateProduct(id, payloads);
             return new ResponseEntity<>(product, HttpStatus.OK);
-//        }catch (Exception exception) {
-//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
+        }catch (Exception exception) {
+            throw exception;
+        }
     }
 
     private Product getProductFromProductDto(ProductDto productDto) {
@@ -74,9 +74,12 @@ public class ProductController {
         product.setPrice(productDto.getPrice());
         product.setImageUrl(productDto.getImage());
 
-//        Category category = new Category();
-//        category.setName(productDto.getCategory());
-//        product.setCategory(category);
+        if(productDto.getCategory() != null) {
+            Category category = new Category();
+            category.setName(productDto.getCategory().getName());
+            category.setDescription(productDto.getCategory().getDescription());
+            product.setCategory(category);
+        }
 
         return product;
     }
