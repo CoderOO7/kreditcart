@@ -4,12 +4,11 @@ import com.kreditcart.productCatalogue.Clients.FakeStore.Client.FakeStoreAPIClie
 import com.kreditcart.productCatalogue.Clients.FakeStore.Dtos.FakeStoreProductDto;
 import com.kreditcart.productCatalogue.Models.Category;
 import com.kreditcart.productCatalogue.Models.Product;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
+//@Service
 public class FakeStoreProductService implements IProductService {
     private FakeStoreAPIClient fakeStoreAPIClient;
 
@@ -36,7 +35,6 @@ public class FakeStoreProductService implements IProductService {
 
     @Override
     public Product createProduct(Product product) {
-        System.out.println("createProduct---------------" + product);
         FakeStoreProductDto fakeStoreProductDto = this.getFakeStoreProductDtoFromProduct(product);
         return getProductFromFakeStoreProductDto(this.fakeStoreAPIClient.createProduct(fakeStoreProductDto));
     }

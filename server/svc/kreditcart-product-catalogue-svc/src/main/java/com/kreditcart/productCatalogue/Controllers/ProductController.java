@@ -1,6 +1,5 @@
 package com.kreditcart.productCatalogue.Controllers;
 
-import com.kreditcart.productCatalogue.Clients.FakeStore.Dtos.FakeStoreProductDto;
 import com.kreditcart.productCatalogue.Dtos.ProductDto;
 import com.kreditcart.productCatalogue.Models.Category;
 import com.kreditcart.productCatalogue.Models.Product;
@@ -76,8 +75,7 @@ public class ProductController {
 
         if(productDto.getCategory() != null) {
             Category category = new Category();
-            category.setName(productDto.getCategory().getName());
-            category.setDescription(productDto.getCategory().getDescription());
+            category.setName(productDto.getCategory());
             product.setCategory(category);
         }
 

@@ -1,6 +1,5 @@
 package com.kreditcart.productCatalogue.Dtos;
 
-import com.kreditcart.productCatalogue.Models.Category;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -14,6 +13,6 @@ public class ProductDto {
     private String description;
     private Double price;
     private String image;
-    private Category category;
+    private String category;
     private RatingDto ratingDto;
 }
