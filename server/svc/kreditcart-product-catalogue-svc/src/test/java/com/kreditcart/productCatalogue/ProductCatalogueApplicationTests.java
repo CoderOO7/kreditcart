@@ -20,11 +20,23 @@ class ProductCatalogueApplicationTests {
     @Transactional
     @Rollback(value = false)
     void demonstrateLoading(){
-        Category category = categoryRepo.findById(2L).get();
+        Category category = categoryRepo.findById(1L).get();
         List<Product> productList = category.getProducts();
         for(Product product: productList){
-            System.out.println(product.getId());
+            System.out.println("id----" + product.getId());
         }
     }
 
+    @Test
+    @Transactional
+    @Rollback(value = false)
+    void demonstrateSubQueryUsage(){
+        List<Category> categoryList = categoryRepo.findAll();
+        for(Category category: categoryList) {
+            List<Product> productList = category.getProducts();
+            for(Product product: productList){
+                System.out.println("id----" + product.getId());
+            }
+        }
+    }
 }
