@@ -30,7 +30,7 @@ class ProductCatalogueApplicationTests {
     @Test
     @Transactional
     @Rollback(value = false)
-    void demonstrateSubQueryUsage(){
+    void demonstrateNPlusOneProblem(){
         List<Category> categoryList = categoryRepo.findAll();
         for(Category category: categoryList) {
             List<Product> productList = category.getProducts();
