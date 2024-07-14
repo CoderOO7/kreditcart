@@ -8,6 +8,8 @@ import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 @Getter
 @Setter
@@ -21,4 +23,5 @@ public class Product extends BaseModel {
     @JsonBackReference()
     @ManyToOne(cascade = CascadeType.ALL)
     private Category category;
+    private Boolean isSpecial;
 }
