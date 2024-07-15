@@ -67,5 +67,12 @@ class ProductCatalogueApplicationTests {
         for(Product product: specialProductList) {
             System.out.println("specialProductId---" + product.getId());
         }
+
+        String title = productRepo.getProductTitleFromId(2L);
+        System.out.println("productTitle---" + title);
+
+
+        List<String> categoryName = productRepo.getCategoryNameFromProductId(2L);
+        System.out.println("categoryName---" + categoryName);
     }
 }
