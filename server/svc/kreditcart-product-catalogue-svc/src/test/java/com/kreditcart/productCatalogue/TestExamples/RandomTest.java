@@ -1,4 +1,4 @@
-package com.kreditcart.productCatalogue;
+package com.kreditcart.productCatalogue.TestExamples;
 
 import org.junit.jupiter.api.Test;
 
