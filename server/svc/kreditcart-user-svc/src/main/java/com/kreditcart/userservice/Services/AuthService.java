@@ -3,6 +3,7 @@ package com.kreditcart.userservice.Services;
 import com.kreditcart.userservice.Models.User;
 import com.kreditcart.userservice.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -11,16 +12,16 @@ import java.util.Optional;
 public class AuthService {
     @Autowired
     private UserRepository userRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
     public User userSignup(String email, String password) {
         Optional<User> userOptional = userRepository.findByEmail(email);
 
         if(userOptional.isEmpty()) {
             User user = new User();
             user.setEmail(email);
-            user.setPassword(password);
+            user.setPassword(bCryptPasswordEncoder.encode(password));
 
-            User savedUser = userRepository.save(user);
-            return savedUser;
+            return userRepository.save(user);
         }
 
         return userOptional.get();
@@ -33,7 +34,7 @@ public class AuthService {
         }
 
         User user = userOptional.get();
-        if(!user.getPassword().equals(password)) {
+        if(!bCryptPasswordEncoder.matches(password, user.getPassword())) {
             return null;
         }
 
