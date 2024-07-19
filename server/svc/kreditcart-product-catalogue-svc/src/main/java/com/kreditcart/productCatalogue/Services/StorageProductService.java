@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 // Comment below annotation to use StubProductService for test
-//@Service
+@Service
 public class StorageProductService implements IProductService {
     private ProductRepo productRepo;
 
