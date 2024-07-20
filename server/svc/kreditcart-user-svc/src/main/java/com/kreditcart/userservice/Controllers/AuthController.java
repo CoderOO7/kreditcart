@@ -5,9 +5,11 @@ import com.kreditcart.userservice.Dtos.SignupRequestDto;
 import com.kreditcart.userservice.Dtos.UserDto;
 import com.kreditcart.userservice.Models.User;
 import com.kreditcart.userservice.Services.AuthService;
+import org.antlr.v4.runtime.misc.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,9 +30,9 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<UserDto> login(@RequestBody LoginRequestDto loginRequestDto) {
         try {
-            User user = authService.userLogin(loginRequestDto.getEmail(), loginRequestDto.getPassword());
-            UserDto userDto = getUserDtoFromUser(user);
-            return new ResponseEntity<>(userDto, HttpStatus.OK);
+            Pair<User, MultiValueMap<String, String>> bodyWithHeaders = authService.userLogin(loginRequestDto.getEmail(), loginRequestDto.getPassword());
+            UserDto userDto = getUserDtoFromUser(bodyWithHeaders.a);
+            return new ResponseEntity<>(userDto, bodyWithHeaders.b, HttpStatus.OK);
         }catch (Exception ex) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
@@ -42,5 +44,4 @@ public class AuthController {
         userDto.setRoles(user.getRoles());
         return userDto;
     }
-
 }
