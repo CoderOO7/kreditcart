@@ -17,8 +17,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(ProductController.class)
 public class ProductControllerMVCTest {
@@ -30,6 +29,7 @@ public class ProductControllerMVCTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
     @Test
     public void Test_GetProducts_ReceiveSuccessfulResponse() throws Exception {
         List<Product> products = new ArrayList<>();
@@ -46,28 +46,32 @@ public class ProductControllerMVCTest {
 
         mockMvc.perform(get("/products"))
                 .andExpect(status().isOk())
-                .andExpect(content().string(objectMapper.writeValueAsString(products)));
+                .andExpect(content().string(objectMapper.writeValueAsString(products)))
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[0].title").value("Iphone13"));
     }
 
     @Test
     public void Test_CreateProduct_ReceiveSuccessfulResponse() throws Exception {
-         Product productToCreate = new Product();
-         productToCreate.setTitle("Defender");
-         productToCreate.setPrice(30000000.0);
+        Product productToCreate = new Product();
+        productToCreate.setTitle("Defender");
+        productToCreate.setPrice(30000000.0);
 
-         Product expectedProduct = new Product();
-         productToCreate.setId(19902L);
-         productToCreate.setTitle("Defender");
-         productToCreate.setPrice(30000000.0);
-
+        Product expectedProduct = new Product();
+        productToCreate.setId(19902L);
+        productToCreate.setTitle("Defender");
+        productToCreate.setPrice(30000000.0);
 
         when(productService.createProduct(any(Product.class))).thenReturn(expectedProduct);
 
-         mockMvc.perform(post("/products")
-                         .contentType(MediaType.APPLICATION_JSON)
-                         .content(objectMapper.writeValueAsString(productToCreate)))
-                 .andExpect(status().isOk())
-                 .andExpect(content().string(objectMapper.writeValueAsString(expectedProduct)));
+        mockMvc.perform(post("/products")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(productToCreate)))
+                .andExpect(status().isOk())
+                .andExpect(content().string(objectMapper.writeValueAsString(expectedProduct)))
 
+                // Todo: in case of post getting product in response with all fields as null ?
+                .andExpect(jsonPath("$.length()").value(9))
+                .andExpect(jsonPath("$.title").value("Defender"));
     }
-    }
+}

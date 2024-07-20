@@ -1,0 +1,46 @@
+package com.kreditcart.userservice.Controllers;
+
+import com.kreditcart.userservice.Dtos.LoginRequestDto;
+import com.kreditcart.userservice.Dtos.SignupRequestDto;
+import com.kreditcart.userservice.Dtos.UserDto;
+import com.kreditcart.userservice.Models.User;
+import com.kreditcart.userservice.Services.AuthService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RequestMapping("kreditcart-user-svc/auth")
+@RestController
+public class AuthController {
+    @Autowired
+    private AuthService authService;
+
+    @PostMapping("/signup")
+    public ResponseEntity<UserDto> signUp(@RequestBody SignupRequestDto signupRequestDto) {
+        User user = authService.userSignup(signupRequestDto.getEmail(), signupRequestDto.getPassword());
+        UserDto userDto = getUserDtoFromUser(user);
+        return new ResponseEntity<>(userDto, HttpStatus.OK);
+    }
+    @PostMapping("/login")
+    public ResponseEntity<UserDto> login(@RequestBody LoginRequestDto loginRequestDto) {
+        try {
+            User user = authService.userLogin(loginRequestDto.getEmail(), loginRequestDto.getPassword());
+            UserDto userDto = getUserDtoFromUser(user);
+            return new ResponseEntity<>(userDto, HttpStatus.OK);
+        }catch (Exception ex) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    private UserDto getUserDtoFromUser(User user) {
+        UserDto userDto = new UserDto();
+        userDto.setEmail(user.getEmail());
+        userDto.setRoles(user.getRoles());
+        return userDto;
+    }
+
+}

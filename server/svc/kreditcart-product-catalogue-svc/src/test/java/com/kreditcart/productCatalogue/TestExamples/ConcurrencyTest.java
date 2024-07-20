@@ -1,3 +1,5 @@
+package com.kreditcart.productCatalogue.TestExamples;
+
 import org.junit.jupiter.api.Test;
 import org.w3c.dom.css.Counter;
 

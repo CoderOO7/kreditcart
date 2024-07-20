@@ -2,10 +2,12 @@ package com.kreditcart.productCatalogue.Services;
 
 import com.kreditcart.productCatalogue.Models.Product;
 import com.kreditcart.productCatalogue.Repositories.ProductRepo;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+// Comment below annotation to use StubProductService for test
 @Service
 public class StorageProductService implements IProductService {
     private ProductRepo productRepo;
