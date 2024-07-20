@@ -1,6 +1,9 @@
 package com.kreditcart.userservice.Services;
 
+import com.kreditcart.userservice.Enums.SessionStatusEnum;
+import com.kreditcart.userservice.Models.Session;
 import com.kreditcart.userservice.Models.User;
+import com.kreditcart.userservice.Repositories.SessionRepository;
 import com.kreditcart.userservice.Repositories.UserRepository;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.MacAlgorithm;
@@ -20,6 +23,8 @@ import java.util.*;
 public class AuthService {
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private SessionRepository sessionRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
     public User userSignup(String email, String password) {
         Optional<User> userOptional = userRepository.findByEmail(email);
@@ -57,16 +62,24 @@ public class AuthService {
 //        byte[] content = payloads.getBytes(StandardCharsets.UTF_8);
 
         long nowInMillis = System.currentTimeMillis();
+        Date expiryTime =  new Date(nowInMillis + 10000);
         Map<String, Object> jwtData = new HashMap<>();
         jwtData.put("email", user.getEmail());
         jwtData.put("roles", user.getRoles());
-        jwtData.put("expiryTime", new Date(nowInMillis + 10000));
+        jwtData.put("expiryTime", expiryTime);
         jwtData.put("createdAt", new Date(nowInMillis));
 
         // secret key generation
         MacAlgorithm macAlgorithm = Jwts.SIG.HS256;
         SecretKey secretKey = macAlgorithm.key().build();
         String token = Jwts.builder().claims(jwtData).signWith(secretKey).compact();
+
+        Session session = new Session();
+        session.setSessionStatus(SessionStatusEnum.ACTIVE);
+        session.setUser(user);
+        session.setToken(token);
+        session.setExpiryTime(expiryTime);
+        sessionRepository.save(session);
 
         // pass token in cookies
         // multiValueMap is wrapper of Map
