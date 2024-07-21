@@ -14,7 +14,7 @@ public class PaymentGatewayStrategyChooser {
 
     public PaymentGateway getBestPaymentGateway() {
         //Todo: return random payment gateway
-        return this.razorpayPaymentGateway;
+        return this.stripePaymentGateway;
     }
 
 }

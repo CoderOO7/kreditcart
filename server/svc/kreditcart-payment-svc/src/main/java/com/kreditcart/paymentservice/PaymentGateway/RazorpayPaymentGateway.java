@@ -37,7 +37,7 @@ public class RazorpayPaymentGateway implements PaymentGateway {
             paymentLinkRequest.put("reminder_enable",true);
 
 
-            paymentLinkRequest.put("callback_url","https://example-callback-url.com/");
+            paymentLinkRequest.put("callback_url","https://youtu.be/TSqxarbHqHA?t=47");
             paymentLinkRequest.put("callback_method","get");
 
             PaymentLink paymentLink = razorpayClient.paymentLink.create(paymentLinkRequest);
