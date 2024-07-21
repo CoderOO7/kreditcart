@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.RestController;
 // @RestController is the combination of @Controller and @ResponseBody.
 // It handles web request and ensures that the response send to the client will always be in JSON or XML format.
 @RestController
-@RequestMapping("/kreditcart/payments")
+@RequestMapping("/kreditcart-payment-svc/payments")
 public class PaymentController {
     @Autowired
     private PaymentService paymentService;
 
-    @PostMapping("/payment-link")
+    @PostMapping("payment-link")
     public String initiatePaymentLink(@RequestBody InitiatePaymentDto initiatePaymentDto){
-        return paymentService.initiatePaymentLink();
+        return paymentService.initiatePaymentLink(initiatePaymentDto.getOrderId(), initiatePaymentDto.getEmail(), initiatePaymentDto.getPhoneNumber(), initiatePaymentDto.getAmount());
     }
 }
