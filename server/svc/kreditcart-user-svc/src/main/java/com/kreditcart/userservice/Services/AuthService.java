@@ -5,8 +5,9 @@ import com.kreditcart.userservice.Models.Session;
 import com.kreditcart.userservice.Models.User;
 import com.kreditcart.userservice.Repositories.SessionRepository;
 import com.kreditcart.userservice.Repositories.UserRepository;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.MacAlgorithm;
 import org.antlr.v4.runtime.misc.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -16,7 +17,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import javax.crypto.SecretKey;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 @Service
@@ -25,11 +25,14 @@ public class AuthService {
     private UserRepository userRepository;
     @Autowired
     private SessionRepository sessionRepository;
+    @Autowired
+    private SecretKey secretKey;
     private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+
     public User userSignup(String email, String password) {
         Optional<User> userOptional = userRepository.findByEmail(email);
 
-        if(userOptional.isEmpty()) {
+        if (userOptional.isEmpty()) {
             User user = new User();
             user.setEmail(email);
             user.setPassword(bCryptPasswordEncoder.encode(password));
@@ -42,12 +45,12 @@ public class AuthService {
 
     public Pair<User, MultiValueMap<String, String>> userLogin(String email, String password) {
         Optional<User> userOptional = userRepository.findByEmail(email);
-        if(userOptional.isEmpty()) {
+        if (userOptional.isEmpty()) {
             return null;
         }
 
         User user = userOptional.get();
-        if(!bCryptPasswordEncoder.matches(password, user.getPassword())) {
+        if (!bCryptPasswordEncoder.matches(password, user.getPassword())) {
             return null;
         }
 
@@ -62,16 +65,16 @@ public class AuthService {
 //        byte[] content = payloads.getBytes(StandardCharsets.UTF_8);
 
         long nowInMillis = System.currentTimeMillis();
-        Date expiryTime =  new Date(nowInMillis + 10000);
+        Date expiryTime = new Date(nowInMillis + 10000000);
         Map<String, Object> jwtData = new HashMap<>();
         jwtData.put("email", user.getEmail());
         jwtData.put("roles", user.getRoles());
         jwtData.put("expiryTime", expiryTime);
         jwtData.put("createdAt", new Date(nowInMillis));
 
-        // secret key generation
-        MacAlgorithm macAlgorithm = Jwts.SIG.HS256;
-        SecretKey secretKey = macAlgorithm.key().build();
+//        // secret key generation will be handled from bean
+//        MacAlgorithm macAlgorithm = Jwts.SIG.HS256;
+//        SecretKey secretKey = macAlgorithm.key().build();
         String token = Jwts.builder().claims(jwtData).signWith(secretKey).compact();
 
         Session session = new Session();
@@ -84,8 +87,48 @@ public class AuthService {
         // pass token in cookies
         // multiValueMap is wrapper of Map
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
-        headers.add(HttpHeaders.SET_COOKIE, "jwt="+token);
+        headers.add(HttpHeaders.SET_COOKIE, "jwt=" + token);
 
         return new Pair<User, MultiValueMap<String, String>>(user, headers);
+    }
+
+    public Boolean validateToken(String token, long userId) {
+        Optional<Session> optionalSession = this.sessionRepository.findByTokenAndUser_Id(token, userId);
+        if (optionalSession.isEmpty()) {
+            System.out.println("No token or User found");
+            return false;
+        }
+
+        Session session = optionalSession.get();
+        String storedToken = session.getToken();
+
+        JwtParser jwtParser = Jwts.parser().verifyWith(secretKey).build();
+        Claims claims = jwtParser.parseSignedClaims(storedToken).getPayload();
+
+        long nowInMillis = System.currentTimeMillis();
+        long tokenExpiry = (Long)claims.get("expiryTime");
+
+        if(nowInMillis > tokenExpiry) {
+            System.out.println("nowInMillis: " + nowInMillis);
+            System.out.println("tokenExpiry: "+ tokenExpiry);
+            System.out.println("User doesn't match");
+            return false;
+        }
+
+        Optional<User> optionalUser =  userRepository.findById(userId);
+        if(optionalUser.isEmpty()) {
+            System.out.println("User not found");
+            return false;
+        }
+
+        String email = optionalUser.get().getEmail();
+        if(!email.equals(claims.get("email"))){
+            System.out.println("userEmail:" + email);
+            System.out.println("tokenEmail:" + claims.get("email"));
+            System.out.println("User doesn't match");
+            return false;
+        }
+
+        return true;
     }
 }

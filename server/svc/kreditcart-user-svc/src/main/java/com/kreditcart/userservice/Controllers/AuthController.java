@@ -3,6 +3,7 @@ package com.kreditcart.userservice.Controllers;
 import com.kreditcart.userservice.Dtos.LoginRequestDto;
 import com.kreditcart.userservice.Dtos.SignupRequestDto;
 import com.kreditcart.userservice.Dtos.UserDto;
+import com.kreditcart.userservice.Dtos.ValidateRequestDto;
 import com.kreditcart.userservice.Models.User;
 import com.kreditcart.userservice.Services.AuthService;
 import org.antlr.v4.runtime.misc.Pair;
@@ -10,10 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("kreditcart-user-svc/auth")
 @RestController
@@ -36,6 +34,12 @@ public class AuthController {
         }catch (Exception ex) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @GetMapping("/validate")
+    public ResponseEntity<Boolean> validateToken(@RequestBody ValidateRequestDto validateRequestDto) {
+        Boolean isValid = authService.validateToken(validateRequestDto.getToken(), validateRequestDto.getUserId());
+        return new ResponseEntity<>(isValid, HttpStatus.OK);
     }
 
     private UserDto getUserDtoFromUser(User user) {
