@@ -13,8 +13,10 @@ import java.util.List;
 @Service
 public class StorageProductService implements IProductService {
     private ProductRepo productRepo;
+    private RestTemplate restTemplate;
 
-    public StorageProductService(ProductRepo productRepo){
+    public StorageProductService(RestTemplate restTemplate,  ProductRepo productRepo){
+        this.restTemplate = restTemplate;
         this.productRepo = productRepo;
     }
 
@@ -27,9 +29,8 @@ public class StorageProductService implements IProductService {
     @Override
     public Product getProductDetails(Long userId, Long productId) {
         Product product = productRepo.findProductById(productId);
-        System.out.println(product);
-        RestTemplate restTemplate = new RestTemplate();
-        UserDto userDto = restTemplate.getForEntity("http://localhost:9000/kreditcart-user-svc/users/{id}", UserDto.class, userId).getBody();
+//        RestTemplate restTemplate =  new RestTemplate();
+        UserDto userDto = restTemplate.getForEntity("http://userservice/kreditcart-user-svc/users/{id}", UserDto.class, userId).getBody();
         System.out.println("userEmail:" + userDto.getEmail());
         return product;
     }
