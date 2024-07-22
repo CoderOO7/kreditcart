@@ -1,9 +1,11 @@
 package com.kreditcart.productCatalogue.Services;
 
+import com.kreditcart.productCatalogue.Dtos.UserDto;
 import com.kreditcart.productCatalogue.Models.Product;
 import com.kreditcart.productCatalogue.Repositories.ProductRepo;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -19,6 +21,17 @@ public class StorageProductService implements IProductService {
     @Override
     public List<Product> getAllProducts() {
         return this.productRepo.findAll();
+    }
+
+    // created to test service to service api call using service discovery
+    @Override
+    public Product getProductDetails(Long userId, Long productId) {
+        Product product = productRepo.findProductById(productId);
+        System.out.println(product);
+        RestTemplate restTemplate = new RestTemplate();
+        UserDto userDto = restTemplate.getForEntity("http://localhost:9000/kreditcart-user-svc/users/{id}", UserDto.class, userId).getBody();
+        System.out.println("userEmail:" + userDto.getEmail());
+        return product;
     }
 
     @Override
