@@ -13,8 +13,8 @@ public class PaymentGatewayStrategyChooser {
     }
 
     public PaymentGateway getBestPaymentGateway() {
-        //Todo: return random payment gateway
-        return this.stripePaymentGateway;
+        return Math.random() >= 0.5 ? this.stripePaymentGateway : this.razorpayPaymentGateway;
+//        return this.stripePaymentGateway
     }
 
 }
