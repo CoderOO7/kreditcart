@@ -25,7 +25,7 @@ public class StripePaymentGateway implements PaymentGateway {
                             .addLineItem(
                                     PaymentLinkCreateParams.LineItem.builder()
                                             .setPrice(price.getId())
-                                            .setQuantity(100L)
+                                            .setQuantity(1L)
                                             .build()
                             )
                             .setAfterCompletion(
@@ -51,7 +51,7 @@ public class StripePaymentGateway implements PaymentGateway {
         try {
             PriceCreateParams params =
                     PriceCreateParams.builder()
-                            .setCurrency("inr")
+                            .setCurrency("usd")
                             .setUnitAmount(amount)
                             .setProductData(
                                     PriceCreateParams.ProductData.builder().setName("Gold Plan").build()
