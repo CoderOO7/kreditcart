@@ -1,5 +1,9 @@
 package com.kreditcart.userservice.Services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kreditcart.userservice.Clients.KafkaProducerClient;
+import com.kreditcart.userservice.Dtos.SendEmailMessageDto;
 import com.kreditcart.userservice.Enums.SessionStatusEnum;
 import com.kreditcart.userservice.Models.Session;
 import com.kreditcart.userservice.Models.User;
@@ -27,6 +31,10 @@ public class AuthService {
     private SessionRepository sessionRepository;
     @Autowired
     private SecretKey secretKey;
+    @Autowired
+    private KafkaProducerClient kafkaProducerClient;
+    @Autowired
+    private ObjectMapper objectMapper;
     private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
     public User userSignup(String email, String password) {
@@ -37,7 +45,20 @@ public class AuthService {
             user.setEmail(email);
             user.setPassword(bCryptPasswordEncoder.encode(password));
 
-            return userRepository.save(user);
+            User savedUser = userRepository.save(user);
+
+            // PUT message in Queue
+            try {
+                SendEmailMessageDto sendEmailMessageDto = new SendEmailMessageDto();
+                sendEmailMessageDto.setTo(savedUser.getEmail());
+                sendEmailMessageDto.setFrom("knockknock@yourheart.com");
+                sendEmailMessageDto.setSubject("Thinking");
+                sendEmailMessageDto.setBody("Thanks for signing up in my heart. It's only for girls, boys can ignore. Please check this for further info https://youtu.be/dwiaTmTDHWM?t=15");
+                kafkaProducerClient.sendMessage("sendEmail", objectMapper.writeValueAsString(sendEmailMessageDto));
+                return savedUser;
+            }catch(JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
         }
 
         return userOptional.get();
