@@ -4,16 +4,20 @@ import com.kreditcart.productCatalogue.Clients.FakeStore.Client.FakeStoreAPIClie
 import com.kreditcart.productCatalogue.Clients.FakeStore.Dtos.FakeStoreProductDto;
 import com.kreditcart.productCatalogue.Models.Category;
 import com.kreditcart.productCatalogue.Models.Product;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
-//@Service
+@Service
 public class FakeStoreProductService implements IProductService {
     private FakeStoreAPIClient fakeStoreAPIClient;
+    private RedisTemplate<String, Object> redisTemplate;
 
-    public FakeStoreProductService(FakeStoreAPIClient fakeStoreAPIClient) {
+    public FakeStoreProductService(FakeStoreAPIClient fakeStoreAPIClient, RedisTemplate<String, Object> redisTemplate) {
         this.fakeStoreAPIClient = fakeStoreAPIClient;
+        this.redisTemplate = redisTemplate;
     }
 
     @Override
@@ -30,7 +34,24 @@ public class FakeStoreProductService implements IProductService {
 
     @Override
     public Product getProduct(Long productId) {
-        return this.getProductFromFakeStoreProductDto(this.fakeStoreAPIClient.getProduct(productId));
+        // check if product is in cache
+        // if true: ---cache hit
+        //      read from cache
+        // else: -- cache miss
+        //      call fakestore and get result
+        //      store in cache
+
+        FakeStoreProductDto fakeStoreProductDto = null;
+        fakeStoreProductDto = (FakeStoreProductDto)redisTemplate.opsForHash().get("PRODUCTS_",productId);
+        if(fakeStoreProductDto != null) {
+            System.out.println("cache hit");
+            return this.getProductFromFakeStoreProductDto(fakeStoreProductDto);
+        }
+
+        System.out.println("cache miss");
+        fakeStoreProductDto = this.fakeStoreAPIClient.getProduct(productId);
+        redisTemplate.opsForHash().put("PRODUCTS_", productId, fakeStoreProductDto);
+        return this.getProductFromFakeStoreProductDto(fakeStoreProductDto);
     }
 
     @Override

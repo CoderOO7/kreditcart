@@ -10,7 +10,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 
 // Comment below annotation to use StubProductService for test
-@Service
+//@Service
 public class StorageProductService implements IProductService {
     private ProductRepo productRepo;
     private RestTemplate restTemplate;
