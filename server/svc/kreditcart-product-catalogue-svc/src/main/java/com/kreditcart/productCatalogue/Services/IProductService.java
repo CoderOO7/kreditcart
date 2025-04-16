@@ -4,6 +4,7 @@ import com.kreditcart.productCatalogue.Dtos.ProductDto;
 import com.kreditcart.productCatalogue.Models.Product;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IProductService {
     List<Product> getAllProducts();
@@ -12,7 +13,7 @@ public interface IProductService {
 
     Product createProduct(Product product);
 
-    Product updateProduct(Long id, Product product);
+    Product updateProduct(Long id, Map<String, Object> product);
 
     Product getProductDetails(Long userId, Long productId);
 }

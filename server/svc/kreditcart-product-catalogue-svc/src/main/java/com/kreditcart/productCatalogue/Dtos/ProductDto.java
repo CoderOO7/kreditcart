@@ -15,4 +15,6 @@ public class ProductDto {
     private String image;
     private String category;
     private RatingDto ratingDto;
+    private Boolean isSpecial = false;
+    private int stock = 0;
 }

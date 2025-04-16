@@ -9,8 +9,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-@Service
+//@Service
 public class FakeStoreProductService implements IProductService {
     private FakeStoreAPIClient fakeStoreAPIClient;
     private RedisTemplate<String, Object> redisTemplate;
@@ -61,9 +62,10 @@ public class FakeStoreProductService implements IProductService {
     }
 
     @Override
-    public Product updateProduct(Long id, Product product) {
-        FakeStoreProductDto fakeStoreProductDto = this.getFakeStoreProductDtoFromProduct(product);
-        return getProductFromFakeStoreProductDto(this.fakeStoreAPIClient.updateProduct(id, fakeStoreProductDto));
+    public Product updateProduct(Long id, Map<String, Object> product) {
+        return null;
+//        FakeStoreProductDto fakeStoreProductDto = this.getFakeStoreProductDtoFromProduct(product);
+//        return getProductFromFakeStoreProductDto(this.fakeStoreAPIClient.updateProduct(id, fakeStoreProductDto));
     }
 
     @Override

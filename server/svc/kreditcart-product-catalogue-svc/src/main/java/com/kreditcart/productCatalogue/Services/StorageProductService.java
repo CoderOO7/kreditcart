@@ -1,23 +1,31 @@
 package com.kreditcart.productCatalogue.Services;
 
 import com.kreditcart.productCatalogue.Dtos.UserDto;
+import com.kreditcart.productCatalogue.Exceptions.CategoryNotFoundException;
+import com.kreditcart.productCatalogue.Exceptions.ProductNotFoundException;
+import com.kreditcart.productCatalogue.Models.Category;
 import com.kreditcart.productCatalogue.Models.Product;
+import com.kreditcart.productCatalogue.Repositories.CategoryRepo;
 import com.kreditcart.productCatalogue.Repositories.ProductRepo;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ReflectionUtils;
 import org.springframework.web.client.RestTemplate;
 
+import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
 
 // Comment below annotation to use StubProductService for test
-//@Service
+@Service
 public class StorageProductService implements IProductService {
     private ProductRepo productRepo;
+    private CategoryRepo categoryRepo;
     private RestTemplate restTemplate;
 
-    public StorageProductService(RestTemplate restTemplate,  ProductRepo productRepo){
+    public StorageProductService(RestTemplate restTemplate, ProductRepo productRepo, CategoryRepo categoryRepo){
         this.restTemplate = restTemplate;
         this.productRepo = productRepo;
+        this.categoryRepo = categoryRepo;
     }
 
     @Override
@@ -29,7 +37,7 @@ public class StorageProductService implements IProductService {
     @Override
     public Product getProductDetails(Long userId, Long productId) {
         Product product = productRepo.findProductById(productId);
-//        RestTemplate restTemplate =  new RestTemplate();
+//        RestTemplate restTemplate =  new RestTemplate();x
         UserDto userDto = restTemplate.getForEntity("http://userservice/kreditcart-user-svc/users/{id}", UserDto.class, userId).getBody();
         System.out.println("userEmail:" + userDto.getEmail());
         return product;
@@ -37,7 +45,9 @@ public class StorageProductService implements IProductService {
 
     @Override
     public Product getProduct(Long productId) {
-        return this.productRepo.findById(productId).orElse(null);
+        return  this.productRepo
+                        .findById(productId)
+                        .orElseThrow(()-> new ProductNotFoundException(String.format("Product not found with given id %s", productId)));
     }
 
     @Override
@@ -46,7 +56,34 @@ public class StorageProductService implements IProductService {
     }
 
     @Override
-    public Product updateProduct(Long id, Product product) {
-        return null;
+    public Product updateProduct(Long id, Map<String, Object> updates) {
+
+        Product product = productRepo.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException("Product not found"));
+
+        updates.forEach((key, value) -> {
+            Field field = ReflectionUtils.findField(Product.class, key);
+
+            if (field != null) {
+                field.setAccessible(true);
+                Class<?> fieldType = field.getType();
+
+                Object finalValue = value;
+
+                if (fieldType.equals(Double.class) && value instanceof Integer) {
+                    finalValue = ((Integer) value).doubleValue(); // converting to double
+                }
+
+                else if (fieldType.equals(Category.class)) {
+                    Long categoryId = Long.valueOf(value.toString());
+                    finalValue = categoryRepo.findById(categoryId)
+                            .orElseThrow(() -> new CategoryNotFoundException("Category not found"));
+                }
+
+                ReflectionUtils.setField(field, product, finalValue);
+            }
+        });
+
+        return productRepo.save(product);
     }
 }

@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RequestMapping("/products")
 @RestController
@@ -40,6 +41,7 @@ public class ProductController {
             Product product = this.productService.getProduct(id);
             return new ResponseEntity<>(product, HttpStatus.OK);
         }catch (Exception exception) {
+            System.out.printf("getProduct error : %s%n", exception.getMessage());
             throw exception;
         }
     }
@@ -69,9 +71,8 @@ public class ProductController {
     }
 
     @PatchMapping("{id}")
-    public ResponseEntity<Product> updateProduct(@RequestBody ProductDto productDto, @PathVariable("id") Long id) {
+    public ResponseEntity<Product> updateProduct(@RequestBody Map<String, Object> payloads, @PathVariable("id") Long id) {
         try{
-            Product payloads = this.getProductFromProductDto(productDto);
             Product product = this.productService.updateProduct(id, payloads);
             return new ResponseEntity<>(product, HttpStatus.OK);
         }catch (Exception exception) {
@@ -86,6 +87,8 @@ public class ProductController {
         product.setDescription(productDto.getDescription());
         product.setPrice(productDto.getPrice());
         product.setImageUrl(productDto.getImage());
+        product.setStock(productDto.getStock());
+        product.setIsSpecial(productDto.getIsSpecial());
 
         if(productDto.getCategory() != null) {
             Category category = new Category();

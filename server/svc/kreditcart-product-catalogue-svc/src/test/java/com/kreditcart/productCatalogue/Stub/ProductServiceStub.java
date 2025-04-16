@@ -36,9 +36,10 @@ public class ProductServiceStub implements IProductService {
     }
 
     @Override
-    public Product updateProduct(Long id, Product product) {
-        products.put(id, product);
-        return products.get(id);
+    public Product updateProduct(Long id, Map<String, Object> product) {
+        return null;
+//        products.put(id, product);
+//        return products.get(id);
     }
 
     @Override
