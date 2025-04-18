@@ -11,7 +11,7 @@ import lombok.ToString;
 @Setter
 @ToString
 public class Inventory extends BaseModel {
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private Long productId;
 
     @Column(nullable = false)
