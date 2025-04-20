@@ -2,25 +2,24 @@ package com.kreditcart.productCatalogue.Models;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 @Getter
 @Setter
 @ToString
 @Entity
+@Table(name = "products")
 public class Product extends BaseModel {
     @Column(nullable = false)
     private String title;
 
     private String description;
+
+    @Column(nullable = false, unique = true)
+    private String sku;
 
     @Column(nullable = false)
     private Double price;
@@ -29,6 +28,7 @@ public class Product extends BaseModel {
 
     @JsonBackReference()
     @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "category_id")
     private Category category;
 
     private Boolean isSpecial = false;

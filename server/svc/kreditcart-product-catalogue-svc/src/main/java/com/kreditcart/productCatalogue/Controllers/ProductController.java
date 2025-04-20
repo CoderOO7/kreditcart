@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @RequestMapping("/products")
 @RestController
@@ -33,11 +34,8 @@ public class ProductController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Product> getProduct(@PathVariable("id") Long id) {
+    public ResponseEntity<Product> getProduct(@PathVariable("id") UUID id) {
         try {
-            if(id < 1) {
-                throw new IllegalArgumentException("Product id is invalid");
-            }
             Product product = this.productService.getProduct(id);
             return new ResponseEntity<>(product, HttpStatus.OK);
         }catch (Exception exception) {
@@ -47,11 +45,8 @@ public class ProductController {
     }
 
     @GetMapping("{id1}/{id2}")
-    public ResponseEntity<Product> getProductDetails(@PathVariable("id1") Long id1, @PathVariable("id2") Long id2) {
+    public ResponseEntity<Product> getProductDetails(@PathVariable("id1") UUID id1, @PathVariable("id2") UUID id2) {
         try {
-            if(id1 < 1) {
-                throw new IllegalArgumentException("Product id is invalid");
-            }
             Product product = this.productService.getProductDetails(id1, id2);
             return new ResponseEntity<>(product, HttpStatus.OK);
         }catch (Exception exception) {
@@ -71,7 +66,7 @@ public class ProductController {
     }
 
     @PatchMapping("{id}")
-    public ResponseEntity<Product> updateProduct(@RequestBody Map<String, Object> payloads, @PathVariable("id") Long id) {
+    public ResponseEntity<Product> updateProduct(@RequestBody Map<String, Object> payloads, @PathVariable("id") UUID id) {
         try{
             Product product = this.productService.updateProduct(id, payloads);
             return new ResponseEntity<>(product, HttpStatus.OK);
@@ -89,6 +84,7 @@ public class ProductController {
         product.setImageUrl(productDto.getImage());
         product.setStock(productDto.getStock());
         product.setIsSpecial(productDto.getIsSpecial());
+        product.setSku(productDto.getSku());
 
         if(productDto.getCategory() != null) {
             Category category = new Category();

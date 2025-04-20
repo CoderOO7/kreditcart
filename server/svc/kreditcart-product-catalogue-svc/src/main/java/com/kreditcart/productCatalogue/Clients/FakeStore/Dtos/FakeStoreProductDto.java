@@ -5,12 +5,13 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 @Getter
 @Setter
 @ToString
 public class FakeStoreProductDto implements Serializable {
-    private Long id;
+    private UUID id;
     private String title;
     private String description;
     private Double price;

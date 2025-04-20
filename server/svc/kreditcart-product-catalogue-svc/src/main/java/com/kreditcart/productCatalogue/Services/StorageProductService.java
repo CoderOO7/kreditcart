@@ -14,6 +14,7 @@ import org.springframework.web.client.RestTemplate;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 // Comment below annotation to use StubProductService for test
 @Service
@@ -35,7 +36,7 @@ public class StorageProductService implements IProductService {
 
     // created to test service to service api call using service discovery
     @Override
-    public Product getProductDetails(Long userId, Long productId) {
+    public Product getProductDetails(UUID userId, UUID productId) {
         Product product = productRepo.findProductById(productId);
 //        RestTemplate restTemplate =  new RestTemplate();x
         UserDto userDto = restTemplate.getForEntity("http://userservice/kreditcart-user-svc/users/{id}", UserDto.class, userId).getBody();
@@ -44,7 +45,7 @@ public class StorageProductService implements IProductService {
     }
 
     @Override
-    public Product getProduct(Long productId) {
+    public Product getProduct(UUID productId) {
         return  this.productRepo
                         .findById(productId)
                         .orElseThrow(()-> new ProductNotFoundException(String.format("Product not found with given id %s", productId)));
@@ -56,7 +57,7 @@ public class StorageProductService implements IProductService {
     }
 
     @Override
-    public Product updateProduct(Long id, Map<String, Object> updates) {
+    public Product updateProduct(UUID id, Map<String, Object> updates) {
 
         Product product = productRepo.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException("Product not found"));
@@ -75,7 +76,7 @@ public class StorageProductService implements IProductService {
                 }
 
                 else if (fieldType.equals(Category.class)) {
-                    Long categoryId = Long.valueOf(value.toString());
+                    UUID categoryId = UUID.fromString(value.toString());
                     finalValue = categoryRepo.findById(categoryId)
                             .orElseThrow(() -> new CategoryNotFoundException("Category not found"));
                 }
@@ -83,7 +84,6 @@ public class StorageProductService implements IProductService {
                 ReflectionUtils.setField(field, product, finalValue);
             }
         });
-
         return productRepo.save(product);
     }
 }

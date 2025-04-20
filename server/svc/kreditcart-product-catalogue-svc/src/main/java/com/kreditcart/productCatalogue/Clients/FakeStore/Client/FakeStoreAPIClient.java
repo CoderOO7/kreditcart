@@ -11,6 +11,8 @@ import org.springframework.web.client.RequestCallback;
 import org.springframework.web.client.ResponseExtractor;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.UUID;
+
 
 @Component
 public class FakeStoreAPIClient {
@@ -27,7 +29,7 @@ public class FakeStoreAPIClient {
         return fakeStoreProductDtos;
     }
 
-    public FakeStoreProductDto getProduct(Long productId) {
+    public FakeStoreProductDto getProduct(UUID productId) {
         RestTemplate restTemplate = this.restTemplateBuilder.build();
         FakeStoreProductDto fakeStoreProductDto = restTemplate.getForEntity(this.fakeStoreApiBaseUrl + "/products/{id}", FakeStoreProductDto.class, productId).getBody();
         return fakeStoreProductDto;

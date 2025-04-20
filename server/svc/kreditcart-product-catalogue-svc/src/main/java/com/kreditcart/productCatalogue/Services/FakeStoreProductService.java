@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 //@Service
 public class FakeStoreProductService implements IProductService {
@@ -34,7 +35,7 @@ public class FakeStoreProductService implements IProductService {
     }
 
     @Override
-    public Product getProduct(Long productId) {
+    public Product getProduct(UUID productId) {
         // check if product is in cache
         // if true: ---cache hit
         //      read from cache
@@ -62,14 +63,14 @@ public class FakeStoreProductService implements IProductService {
     }
 
     @Override
-    public Product updateProduct(Long id, Map<String, Object> product) {
+    public Product updateProduct(UUID id, Map<String, Object> product) {
         return null;
 //        FakeStoreProductDto fakeStoreProductDto = this.getFakeStoreProductDtoFromProduct(product);
 //        return getProductFromFakeStoreProductDto(this.fakeStoreAPIClient.updateProduct(id, fakeStoreProductDto));
     }
 
     @Override
-    public Product getProductDetails(Long userId, Long productId) {
+    public Product getProductDetails(UUID userId, UUID productId) {
         return null;
     }
 

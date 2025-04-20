@@ -4,18 +4,15 @@ import com.kreditcart.productCatalogue.Models.Product;
 import com.kreditcart.productCatalogue.Services.IProductService;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 //@Service
 public class ProductServiceStub implements IProductService {
-    Map<Long, Product> products;
+    Map<UUID, Product> products;
 
     public ProductServiceStub() {
-        products = new HashMap<Long, Product>();
+        products = new HashMap<UUID, Product>();
     }
 
     @Override
@@ -25,7 +22,7 @@ public class ProductServiceStub implements IProductService {
     }
 
     @Override
-    public Product getProduct(Long productId) {
+    public Product getProduct(UUID productId) {
         return products.get(productId);
     }
 
@@ -36,14 +33,14 @@ public class ProductServiceStub implements IProductService {
     }
 
     @Override
-    public Product updateProduct(Long id, Map<String, Object> product) {
+    public Product updateProduct(UUID id, Map<String, Object> product) {
         return null;
 //        products.put(id, product);
 //        return products.get(id);
     }
 
     @Override
-    public Product getProductDetails(Long userId, Long productId) {
+    public Product getProductDetails(UUID userId, UUID productId) {
         return null;
     }
 }

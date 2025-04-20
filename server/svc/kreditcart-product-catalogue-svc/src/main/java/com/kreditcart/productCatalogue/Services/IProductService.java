@@ -5,15 +5,16 @@ import com.kreditcart.productCatalogue.Models.Product;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public interface IProductService {
     List<Product> getAllProducts();
 
-    Product getProduct(Long productId);
+    Product getProduct(UUID productId);
 
     Product createProduct(Product product);
 
-    Product updateProduct(Long id, Map<String, Object> product);
+    Product updateProduct(UUID id, Map<String, Object> product);
 
-    Product getProductDetails(Long userId, Long productId);
+    Product getProductDetails(UUID userId, UUID productId);
 }

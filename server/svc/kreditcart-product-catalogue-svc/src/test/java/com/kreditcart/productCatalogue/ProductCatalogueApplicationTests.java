@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 
 import java.util.List;
+import java.util.UUID;
 
 @SpringBootTest
 class ProductCatalogueApplicationTests {
@@ -24,7 +25,7 @@ class ProductCatalogueApplicationTests {
     @Transactional
     @Rollback(value = false)
     void demonstrateLoading(){
-        Category category = categoryRepo.findById(1L).get();
+        Category category = categoryRepo.findById(UUID.fromString("2829129a-c8a9-4719-889c-0a2dbfdbb4ab")).get();
         List<Product> productList = category.getProducts();
         for(Product product: productList){
             System.out.println("id----" + product.getId());

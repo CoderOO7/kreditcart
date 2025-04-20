@@ -7,12 +7,13 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 @Repository
-public interface ProductRepo extends JpaRepository<Product, Long> {
+public interface ProductRepo extends JpaRepository<Product, UUID> {
     Product save(Product product);
 
-    Product findProductById(Long id);
+    Product findProductById(UUID id);
 
     List<Product> findProductByPriceBetween(double low, double high);
 

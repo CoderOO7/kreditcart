@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -58,7 +59,7 @@ public class ProductControllerMVCTest {
         productToCreate.setPrice(30000000.0);
 
         Product expectedProduct = new Product();
-        productToCreate.setId(19902L);
+        productToCreate.setId(UUID.fromString("7dc6fc19-de49-4f00-b724-91ae8ef6294a"));
         productToCreate.setTitle("Defender");
         productToCreate.setPrice(30000000.0);
 
