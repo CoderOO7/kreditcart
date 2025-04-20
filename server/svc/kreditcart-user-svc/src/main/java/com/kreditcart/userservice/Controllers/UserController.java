@@ -6,6 +6,8 @@ import com.kreditcart.userservice.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("kreditcart-user-svc/users")
 public class UserController {
@@ -13,7 +15,7 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("{id}")
-    public UserDto getUserDetails(@PathVariable Long id) {
+    public UserDto getUserDetails(@PathVariable UUID id) {
         User user = this.userService.getUserDetails(id);
         return this.getUserDtoFromUser(user);
     }

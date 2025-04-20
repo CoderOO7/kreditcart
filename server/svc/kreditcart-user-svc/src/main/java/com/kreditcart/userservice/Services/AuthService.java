@@ -113,7 +113,7 @@ public class AuthService {
         return new Pair<User, MultiValueMap<String, String>>(user, headers);
     }
 
-    public Boolean validateToken(String token, long userId) {
+    public Boolean validateToken(String token, UUID userId) {
         Optional<Session> optionalSession = this.sessionRepository.findByTokenAndUser_Id(token, userId);
         if (optionalSession.isEmpty()) {
             System.out.println("No token or User found");
