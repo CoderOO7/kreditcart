@@ -10,6 +10,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
+@Table(name = "inventories")
 public class Inventory extends BaseModel {
     @Column(nullable = false, unique = true)
     private Long productId;
