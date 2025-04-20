@@ -7,7 +7,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "address")
+@Table(name = "addresses")
 public class Address extends BaseModel {
     @Column(nullable = false)
     private String line1;

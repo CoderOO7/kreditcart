@@ -7,7 +7,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "city", uniqueConstraints = {
+@Table(name = "cities", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"name", "state_id"})
 })
 public class City extends BaseModel {

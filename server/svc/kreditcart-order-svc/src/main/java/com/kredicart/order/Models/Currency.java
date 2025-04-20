@@ -7,7 +7,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "currency")
+@Table(name = "currencies")
 public class Currency extends BaseModel {
     @Column(length = 50, nullable = false)
     private String name; // eg: 'Indian Rupee, US Dollar'

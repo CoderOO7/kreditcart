@@ -7,7 +7,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "country")
+@Table(name = "countries")
 public class Country extends BaseModel {
     @Column(nullable = false)
     private String name;
