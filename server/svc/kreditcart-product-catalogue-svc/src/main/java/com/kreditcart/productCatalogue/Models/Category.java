@@ -12,7 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "product_categories")
+@Table(name = "categories")
 public class Category extends BaseModel {
     @Column(nullable = false)
     private String name;
