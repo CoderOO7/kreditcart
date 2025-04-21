@@ -1,0 +1,30 @@
+-- Enable UUID extension
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp" SCHEMA public;
+
+CREATE TABLE categories (
+   id UUID DEFAULT uuid_generate_v4() NOT NULL,
+   is_active BOOLEAN DEFAULT TRUE NOT NULL,
+   created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW() NOT NULL,
+   updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW() NOT NULL,
+   name VARCHAR(255) NOT NULL,
+   description VARCHAR(255),
+   CONSTRAINT pk_categories PRIMARY KEY (id)
+);
+
+CREATE TABLE products (
+   id UUID DEFAULT uuid_generate_v4() NOT NULL,
+   is_active BOOLEAN DEFAULT TRUE NOT NULL,
+   created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW() NOT NULL,
+   updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW() NOT NULL,
+   title VARCHAR(255) NOT NULL,
+   description VARCHAR(255),
+   sku VARCHAR(255) NOT NULL,
+   price DOUBLE PRECISION NOT NULL,
+   image_url VARCHAR(255),
+   category_id UUID NOT NULL,
+   is_special BOOLEAN,
+   stock INTEGER DEFAULT 0 NOT NULL,
+   CONSTRAINT pk_products PRIMARY KEY (id)
+);
+ALTER TABLE products ADD CONSTRAINT uc_products_sku UNIQUE (sku);
+ALTER TABLE products ADD CONSTRAINT FK_PRODUCTS_ON_CATEGORY FOREIGN KEY (category_id) REFERENCES categories (id);

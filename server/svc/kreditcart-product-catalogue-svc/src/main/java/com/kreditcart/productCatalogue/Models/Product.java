@@ -28,11 +28,11 @@ public class Product extends BaseModel {
 
     @JsonBackReference()
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
     private Boolean isSpecial = false;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "INTEGER DEFAULT 0")
     private int stock = 0;
 }
