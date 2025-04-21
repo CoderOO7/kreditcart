@@ -1,107 +1,106 @@
-CREATE TABLE country (
-  id BIGINT NOT NULL,
-   is_active BIT(1) NOT NULL,
-   created_at datetime NOT NULL,
-   updated_at datetime NOT NULL,
+-- Enable UUID extension
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp" SCHEMA public;
+
+CREATE TABLE countries (
+   id UUID DEFAULT uuid_generate_v4() NOT NULL,
+   is_active BOOLEAN DEFAULT TRUE NOT NULL,
+   created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW() NOT NULL,
+   updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW() NOT NULL,
    name VARCHAR(255) NOT NULL,
    iso_code VARCHAR(255) NOT NULL,
-   CONSTRAINT pk_country PRIMARY KEY (id)
+   CONSTRAINT pk_countries PRIMARY KEY (id)
 );
-ALTER TABLE country ADD CONSTRAINT uc_country_isocode UNIQUE (iso_code);
+ALTER TABLE countries ADD CONSTRAINT uc_countries_isocode UNIQUE (iso_code);
 
-
-CREATE TABLE state (
-  id BIGINT NOT NULL,
-   is_active BIT(1) NOT NULL,
-   created_at datetime NOT NULL,
-   updated_at datetime NOT NULL,
+CREATE TABLE states (
+  id UUID DEFAULT uuid_generate_v4() NOT NULL,
+   is_active BOOLEAN DEFAULT TRUE NOT NULL,
+   created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW() NOT NULL,
+   updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW() NOT NULL,
    name VARCHAR(255) NOT NULL,
-   country_id BIGINT NULL,
-   CONSTRAINT pk_state PRIMARY KEY (id)
+   country_id UUID NOT NULL,
+   CONSTRAINT pk_states PRIMARY KEY (id)
 );
-ALTER TABLE state ADD CONSTRAINT uc_9f4bc6b7f716080defdf804d9 UNIQUE (name, country_id);
-ALTER TABLE state ADD CONSTRAINT FK_STATE_ON_COUNTRY FOREIGN KEY (country_id) REFERENCES country (id);
+ALTER TABLE states ADD CONSTRAINT uc_001ccadf1dce53cc6b739b27f UNIQUE (name, country_id);
+ALTER TABLE states ADD CONSTRAINT FK_STATES_ON_COUNTRY FOREIGN KEY (country_id) REFERENCES countries (id);
 
-
-CREATE TABLE city (
-  id BIGINT NOT NULL,
-   is_active BIT(1) NOT NULL,
-   created_at datetime NOT NULL,
-   updated_at datetime NOT NULL,
+CREATE TABLE cities (
+   id UUID DEFAULT uuid_generate_v4() NOT NULL,
+   is_active BOOLEAN DEFAULT TRUE NOT NULL,
+   created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW() NOT NULL,
+   updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW() NOT NULL,
    name VARCHAR(255) NOT NULL,
-   state_id BIGINT NULL,
-   CONSTRAINT pk_city PRIMARY KEY (id)
+   state_id UUID NOT NULL,
+   CONSTRAINT pk_cities PRIMARY KEY (id)
 );
-ALTER TABLE city ADD CONSTRAINT uc_23fe726bd40ec85dd0809257a UNIQUE (name, state_id);
-ALTER TABLE city ADD CONSTRAINT FK_CITY_ON_STATE FOREIGN KEY (state_id) REFERENCES state (id);
+ALTER TABLE cities ADD CONSTRAINT uc_921bd305f716e7decc11cf378 UNIQUE (name, state_id);
+ALTER TABLE cities ADD CONSTRAINT FK_CITIES_ON_STATE FOREIGN KEY (state_id) REFERENCES states (id);
 
-
-CREATE TABLE address (
-  id BIGINT NOT NULL,
-   is_active BIT(1) NOT NULL,
-   created_at datetime NOT NULL,
-   updated_at datetime NOT NULL,
+CREATE TABLE addresses (
+   id UUID DEFAULT uuid_generate_v4() NOT NULL,
+   is_active BOOLEAN DEFAULT TRUE NOT NULL,
+   created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW() NOT NULL,
+   updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW() NOT NULL,
    line1 VARCHAR(255) NOT NULL,
-   line2 VARCHAR(255) NULL,
-   land_mark VARCHAR(255) NULL,
-   zip_code VARCHAR(255) NULL,
-   city_id BIGINT NULL,
-   latitude DOUBLE NULL,
-   longitude DOUBLE NULL,
-   CONSTRAINT pk_address PRIMARY KEY (id)
+   line2 VARCHAR(255),
+   land_mark VARCHAR(255),
+   zip_code VARCHAR(255),
+   city_id UUID NOT NULL,
+   latitude DOUBLE PRECISION,
+   longitude DOUBLE PRECISION,
+   CONSTRAINT pk_addresses PRIMARY KEY (id)
 );
-ALTER TABLE address ADD CONSTRAINT FK_ADDRESS_ON_CITY FOREIGN KEY (city_id) REFERENCES city (id);
+ALTER TABLE addresses ADD CONSTRAINT FK_ADDRESSES_ON_CITY FOREIGN KEY (city_id) REFERENCES cities (id);
 
-CREATE TABLE currency (
-   id BIGINT NOT NULL,
-   is_active BIT(1) NOT NULL,
-   created_at datetime NOT NULL,
-   updated_at datetime NOT NULL,
+CREATE TABLE currencies (
+  id UUID DEFAULT uuid_generate_v4() NOT NULL,
+   is_active BOOLEAN DEFAULT TRUE NOT NULL,
+   created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW() NOT NULL,
+   updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW() NOT NULL,
    name VARCHAR(50) NOT NULL,
    code VARCHAR(10) NOT NULL,
-   symbol VARCHAR(5) NOT NULL,
-   CONSTRAINT pk_currency PRIMARY KEY (id)
+   symbol VARCHAR(10) NOT NULL,
+   CONSTRAINT pk_currencies PRIMARY KEY (id)
 );
-ALTER TABLE currency ADD CONSTRAINT uc_currency_code UNIQUE (code);
-
+ALTER TABLE currencies ADD CONSTRAINT uc_currencies_code UNIQUE (code);
 
 CREATE TABLE orders (
-  id BIGINT NOT NULL,
-   is_active BIT(1) NOT NULL,
-   created_at datetime NOT NULL,
-   updated_at datetime NOT NULL,
+   id UUID DEFAULT uuid_generate_v4() NOT NULL,
+   is_active BOOLEAN DEFAULT TRUE NOT NULL,
+   created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW() NOT NULL,
+   updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW() NOT NULL,
    customer_id BIGINT NOT NULL,
    order_code VARCHAR(255) NOT NULL,
-   items_total_amount DOUBLE NOT NULL,
-   items_total_tax DOUBLE NOT NULL,
-   service_charge DOUBLE NOT NULL,
-   delivery_charge DOUBLE NOT NULL,
-   discount_rate DOUBLE NOT NULL,
-   discount_amount DOUBLE NOT NULL,
-   grand_total DOUBLE NOT NULL,
+   items_total_amount DOUBLE PRECISION NOT NULL,
+   items_total_tax DOUBLE PRECISION NOT NULL,
+   service_charge DOUBLE PRECISION NOT NULL,
+   delivery_charge DOUBLE PRECISION NOT NULL,
+   discount_rate DOUBLE PRECISION NOT NULL,
+   discount_amount DOUBLE PRECISION NOT NULL,
+   grand_total DOUBLE PRECISION NOT NULL,
    state VARCHAR(255) NOT NULL,
-   currency_id BIGINT NULL,
+   currency_id UUID,
    CONSTRAINT pk_orders PRIMARY KEY (id)
 );
-ALTER TABLE orders ADD CONSTRAINT FK_ORDERS_ON_CURRENCY FOREIGN KEY (currency_id) REFERENCES currency (id);
+ALTER TABLE orders ADD CONSTRAINT FK_ORDERS_ON_CURRENCY FOREIGN KEY (currency_id) REFERENCES currencies (id);
 
 CREATE TABLE order_items (
-  id BIGINT NOT NULL,
-   is_active BIT(1) NOT NULL,
-   created_at datetime NOT NULL,
-   updated_at datetime NOT NULL,
+   id UUID DEFAULT uuid_generate_v4() NOT NULL,
+   is_active BOOLEAN DEFAULT TRUE NOT NULL,
+   created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW() NOT NULL,
+   updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW() NOT NULL,
    product_id BIGINT NOT NULL,
-   quantity INT NOT NULL,
-   unit_price DOUBLE NOT NULL,
-   actual_amount DOUBLE NOT NULL,
-   discount_rate DOUBLE NOT NULL,
-   discount_amount DOUBLE NOT NULL,
-   tax_rate DOUBLE NOT NULL,
-   tax_amount DOUBLE NOT NULL,
-   total_amount DOUBLE NOT NULL,
+   quantity INTEGER NOT NULL,
+   unit_price DOUBLE PRECISION NOT NULL,
+   actual_amount DOUBLE PRECISION NOT NULL,
+   discount_rate DOUBLE PRECISION NOT NULL,
+   discount_amount DOUBLE PRECISION NOT NULL,
+   tax_rate DOUBLE PRECISION NOT NULL,
+   tax_amount DOUBLE PRECISION NOT NULL,
+   total_amount DOUBLE PRECISION NOT NULL,
    tax_type VARCHAR(255) NOT NULL,
    state VARCHAR(255) NOT NULL,
-   order_id BIGINT NULL,
+   order_id UUID NOT NULL,
    CONSTRAINT pk_order_items PRIMARY KEY (id)
 );
 ALTER TABLE order_items ADD CONSTRAINT FK_ORDER_ITEMS_ON_ORDER FOREIGN KEY (order_id) REFERENCES orders (id);

@@ -45,6 +45,6 @@ public class OrderItem extends BaseModel {
     private OrderItemState state;
 
     @ManyToOne
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 }

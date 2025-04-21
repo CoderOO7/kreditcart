@@ -15,7 +15,7 @@ public class Currency extends BaseModel {
     @Column(length = 10, nullable = false, unique = true)
     private String code; // e.g. INR, USD
 
-    @Column(length = 5, nullable = false)
+    @Column(length = 10, nullable = false)
     private String symbol; // ₹, $, etc.
 
     @PrePersist

@@ -15,7 +15,7 @@ public class City extends BaseModel {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "state_id")
+    @JoinColumn(name = "state_id", nullable = false)
     private State state;
 
     @PrePersist
