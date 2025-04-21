@@ -1,9 +1,6 @@
 package com.kreditcart.userservice.Models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,8 +12,18 @@ import java.util.Set;
 @Setter
 @Table(name = "users")
 public class User extends BaseModel {
+    @Column(nullable = false)
     private String email;
+
+    @Column(nullable = false)
     private String password;
+
     @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"),
+            uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "role_id"})
+    )
     private Set<Role> roles = new HashSet<>();
 }
