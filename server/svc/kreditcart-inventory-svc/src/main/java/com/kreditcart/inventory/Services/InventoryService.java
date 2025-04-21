@@ -5,6 +5,8 @@ import com.kreditcart.inventory.Models.Inventory;
 import com.kreditcart.inventory.Repositories.InventoryRepo;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 
 @Service
 public class InventoryService  {
@@ -20,24 +22,24 @@ public class InventoryService  {
         return inventoryRepository.save(inventory);
     }
 
-    public Inventory getInventory(Long productId) {
+    public Inventory getInventory(UUID productId) {
         return inventoryRepository.findByProductId(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Inventory not found for product id: " + productId));
     }
 
-    public Inventory updateInventory(Long productId, int quantity) {
+    public Inventory updateInventory(UUID productId, int quantity) {
         Inventory inventory = getInventory(productId);
         inventory.setQuantity(quantity);
         return inventoryRepository.save(inventory);
     }
 
-    public Inventory increaseStock(Long productId, int quantity) {
+    public Inventory increaseStock(UUID productId, int quantity) {
         Inventory inventory = getInventory(productId);
         inventory.setQuantity(inventory.getQuantity() + quantity);
         return inventoryRepository.save(inventory);
     }
 
-    public Inventory decreaseStock(Long productId, int quantity) {
+    public Inventory decreaseStock(UUID productId, int quantity) {
         Inventory inventory = getInventory(productId);
         if (inventory.getQuantity() < quantity) {
             throw new IllegalStateException("Insufficient stock");
@@ -46,7 +48,7 @@ public class InventoryService  {
         return inventoryRepository.save(inventory);
     }
 
-    public boolean isInStock(Long productId, int quantity) {
+    public boolean isInStock(UUID productId, int quantity) {
         return inventoryRepository.findByProductId(productId)
                 .map(inv -> inv.getQuantity() >= quantity)
                 .orElse(false);

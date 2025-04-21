@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.UUID;
+
 @Entity
 @Getter
 @Setter
@@ -13,9 +15,9 @@ import lombok.ToString;
 @Table(name = "inventories")
 public class Inventory extends BaseModel {
     @Column(nullable = false, unique = true)
-    private Long productId;
+    private UUID productId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "INTEGER DEFAULT 0")
     private Integer quantity = 0;
 }
 

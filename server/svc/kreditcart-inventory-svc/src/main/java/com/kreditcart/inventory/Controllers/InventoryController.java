@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/inventories")
 public class InventoryController {
@@ -25,24 +27,24 @@ public class InventoryController {
     }
 
     @GetMapping("/{productId}")
-    public ResponseEntity<Inventory> getInventory(@PathVariable Long productId) {
+    public ResponseEntity<Inventory> getInventory(@PathVariable UUID productId) {
         return ResponseEntity.ok(inventoryService.getInventory(productId));
     }
 
     @PutMapping("/{productId}")
-    public ResponseEntity<Inventory> updateInventory(@PathVariable Long productId,
+    public ResponseEntity<Inventory> updateInventory(@PathVariable UUID productId,
                                                      @RequestParam int quantity) {
         return ResponseEntity.ok(inventoryService.updateInventory(productId, quantity));
     }
 
     @PatchMapping("/{productId}/decrease")
-    public ResponseEntity<Inventory> decreaseInventory(@PathVariable Long productId,
+    public ResponseEntity<Inventory> decreaseInventory(@PathVariable UUID productId,
                                                        @RequestParam int quantity) {
         return ResponseEntity.ok(inventoryService.decreaseStock(productId, quantity));
     }
 
     @PatchMapping("/{productId}/increase")
-    public ResponseEntity<Inventory> increaseInventory(@PathVariable Long productId,
+    public ResponseEntity<Inventory> increaseInventory(@PathVariable UUID productId,
                                                        @RequestParam int quantity) {
         return ResponseEntity.ok(inventoryService.increaseStock(productId, quantity));
     }
