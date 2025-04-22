@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-@RequestMapping("/products")
+@RequestMapping("/api/v1/product-svc/products")
 @RestController
 public class ProductController {
 
