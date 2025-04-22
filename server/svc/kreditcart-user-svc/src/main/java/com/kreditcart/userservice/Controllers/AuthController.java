@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("kreditcart-user-svc/auth")
+@RequestMapping("api/v1/user-svc/auth")
 @RestController
 public class AuthController {
     @Autowired

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("kreditcart-user-svc/users")
+@RequestMapping("api/v1/user-svc/users")
 public class UserController {
     @Autowired
     private UserService userService;
