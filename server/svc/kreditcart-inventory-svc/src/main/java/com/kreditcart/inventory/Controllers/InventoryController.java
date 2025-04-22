@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/inventories")
+@RequestMapping("/api/v1/inventory-svc/inventories")
 public class InventoryController {
 
     private final InventoryService inventoryService;
