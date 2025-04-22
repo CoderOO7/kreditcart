@@ -1,0 +1,33 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: kreditcart-api-gateway-svc
+  cloud:
+    gateway:
+      routes:
+        - id: product-service
+          uri: lb://KREDITCART-PRODUCT-SVC
+          predicates:
+            - Path=/api/{version}/product-svc/**
+
+        - id: user-service
+          uri: lb://KREDITCART-USER-SVC
+          predicates:
+            - Path=/api/{version}/user-svc/**
+
+        - id: inventory-service
+          uri: lb://KREDITCART-INVENTORY-SVC
+          predicates:
+            - Path=/api/{version}/inventory-svc/**
+
+        - id: order-service
+          uri: lb://KREDITCART-ORDER-SVC
+          predicates:
+            - Path=/api/{version}/order-svc/**
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
