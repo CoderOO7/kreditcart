@@ -43,9 +43,17 @@ public class Order extends BaseModel {
     private OrderState state;
 
     @ManyToOne
-    @JoinColumn(name = "currency_id")
+    @JoinColumn(name = "currency_id", nullable = false)
     private Currency currency;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> items;
+
+    @ManyToOne
+    @JoinColumn(name = "shipping_address_id", nullable = false)
+    private Address shippingAddress;
+
+    @ManyToOne
+    @JoinColumn(name = "billing_address_id", nullable = false)
+    private Address billingAddress;
 }
