@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -12,7 +13,7 @@ import java.util.List;
 @Table(name = "orders")
 public class Order extends BaseModel {
     @Column(nullable = false)
-    private Long customerId;
+    private UUID customerId;
 
     @Column(nullable = false)
     private String orderCode;
