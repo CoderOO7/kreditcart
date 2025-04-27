@@ -1,8 +1,10 @@
-package com.kredicart.order.Models;
+package com.kreditcart.userservice.Models;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -19,8 +21,12 @@ public class Address extends BaseModel {
     private String zipCode;
 
     @ManyToOne
-    @JoinColumn(name = "city_id")
+    @JoinColumn(name = "city_id", nullable = false)
     private City city;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @Embedded
     private GeoLocation location;

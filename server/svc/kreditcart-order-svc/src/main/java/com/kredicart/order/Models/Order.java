@@ -13,7 +13,7 @@ import java.util.UUID;
 @Table(name = "orders")
 public class Order extends BaseModel {
     @Column(nullable = false)
-    private UUID customerId;
+    private UUID userId;
 
     @Column(nullable = false)
     private String orderCode;
@@ -39,6 +39,12 @@ public class Order extends BaseModel {
     @Column(nullable = false)
     private double grandTotal; // itemsTotalAmount + itemsTotalTax + serviceCharge + deliveryCharge - discountAmount
 
+    @Column(nullable = false)
+    private UUID shippingAddressId;
+
+    @Column(nullable = false)
+    private UUID billingAddressId;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private OrderState state;
@@ -49,12 +55,4 @@ public class Order extends BaseModel {
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> items;
-
-    @ManyToOne
-    @JoinColumn(name = "shipping_address_id", nullable = false)
-    private Address shippingAddress;
-
-    @ManyToOne
-    @JoinColumn(name = "billing_address_id", nullable = false)
-    private Address billingAddress;
 }

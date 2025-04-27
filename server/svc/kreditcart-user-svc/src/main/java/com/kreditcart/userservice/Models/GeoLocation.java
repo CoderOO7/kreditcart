@@ -1,4 +1,4 @@
-package com.kredicart.order.Models;
+package com.kreditcart.userservice.Models;
 
 import jakarta.persistence.Embeddable;
 
