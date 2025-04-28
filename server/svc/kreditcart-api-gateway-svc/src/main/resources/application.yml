@@ -7,25 +7,45 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: product-service
+        - id: product-service-public
           uri: lb://KREDITCART-PRODUCT-SVC
           predicates:
-            - Path=/api/{version}/product-svc/**
+            - Path=/product-svc/api/**
 
-        - id: user-service
+        - id: product-service-internal
+          uri: lb://KREDITCART-PRODUCT-SVC
+          predicates:
+            - Path=/product-svc/internal/api/**
+
+        - id: user-service-public
           uri: lb://KREDITCART-USER-SVC
           predicates:
-            - Path=/api/{version}/user-svc/**
+            - Path=/user-svc/api/**
 
-        - id: inventory-service
+        - id: user-service-internal
+          uri: lb://KREDITCART-USER-SVC
+          predicates:
+            - Path=/user-svc/internal/api/**
+
+        - id: inventory-service-public
           uri: lb://KREDITCART-INVENTORY-SVC
           predicates:
-            - Path=/api/{version}/inventory-svc/**
+            - Path=/inventory-svc/api/**
 
-        - id: order-service
+        - id: inventory-service-internal
+          uri: lb://KREDITCART-INVENTORY-SVC
+          predicates:
+            - Path=/inventory-svc/internal/api/**
+
+        - id: order-service-public
           uri: lb://KREDITCART-ORDER-SVC
           predicates:
-            - Path=/api/{version}/order-svc/**
+            - Path=/order-svc/api/**
+
+        - id: order-service-internal
+          uri: lb://KREDITCART-ORDER-SVC
+          predicates:
+            - Path=/order-svc/internal/api/**
 
 eureka:
   client:

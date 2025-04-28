@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("api/v1/user-svc/auth")
+@RequestMapping("api/v1/auth")
 @RestController
 public class AuthController {
     @Autowired
@@ -44,6 +44,7 @@ public class AuthController {
 
     private UserDto getUserDtoFromUser(User user) {
         UserDto userDto = new UserDto();
+        userDto.setId(user.getId());
         userDto.setEmail(user.getEmail());
 //        userDto.setRoles(user.getRoles());
         return userDto;

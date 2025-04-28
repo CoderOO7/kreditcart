@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("api/v1/user-svc/internal/users")
+@RequestMapping("internal/api/v1/users")
 public class InternalUserController {
     @Autowired
     private InternalUserService userService;
