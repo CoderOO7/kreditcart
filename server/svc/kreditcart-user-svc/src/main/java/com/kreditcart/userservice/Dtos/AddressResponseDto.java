@@ -21,4 +21,5 @@ public class AddressResponseDto {
     private String zipCode;
     private String cityName;
     private GeoLocation location;
+    private UUID userId;
 }

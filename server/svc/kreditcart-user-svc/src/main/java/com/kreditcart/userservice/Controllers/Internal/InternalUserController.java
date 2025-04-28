@@ -1,10 +1,11 @@
-package com.kreditcart.userservice.Controllers;
+package com.kreditcart.userservice.Controllers.Internal;
 
 import com.kreditcart.userservice.Dtos.AddressRequestDto;
 import com.kreditcart.userservice.Dtos.AddressResponseDto;
 import com.kreditcart.userservice.Dtos.UserDto;
-import com.kreditcart.userservice.Services.AddressService;
-import com.kreditcart.userservice.Services.UserService;
+import com.kreditcart.userservice.Models.User;
+import com.kreditcart.userservice.Services.Internal.InternalAddressService;
+import com.kreditcart.userservice.Services.Internal.InternalUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,17 +15,26 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("api/v1/user-svc/users")
-public class UserController {
+@RequestMapping("api/v1/user-svc/internal/users")
+public class InternalUserController {
     @Autowired
-    private UserService userService;
+    private InternalUserService userService;
     @Autowired
-    AddressService addressService;
+    private InternalAddressService addressService;
 
     @GetMapping("{id}")
     public ResponseEntity<UserDto> getUserDetails(@PathVariable UUID id) {
         UserDto user = this.userService.getUserDetails(id);
-        return new ResponseEntity<>(user, HttpStatus.OK) ;
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @GetMapping("{userId}/addresses/{addressId}")
+    public ResponseEntity<AddressResponseDto> getUserAddressById(
+            @PathVariable UUID userId,
+            @PathVariable UUID addressId
+    ) {
+        AddressResponseDto address = addressService.getUserAddressById(userId, addressId);
+        return new ResponseEntity<>(address, HttpStatus.OK);
     }
 
     @GetMapping("{userId}/addresses")

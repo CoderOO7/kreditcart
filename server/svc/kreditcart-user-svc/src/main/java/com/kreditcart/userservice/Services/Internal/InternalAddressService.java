@@ -1,4 +1,4 @@
-package com.kreditcart.userservice.Services;
+package com.kreditcart.userservice.Services.Internal;
 
 import com.kreditcart.userservice.Dtos.AddressRequestDto;
 import com.kreditcart.userservice.Dtos.AddressResponseDto;
@@ -17,7 +17,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-public class AddressService {
+public class InternalAddressService {
 
     @Autowired
     private AddressRepository addressRepository;
@@ -48,6 +48,17 @@ public class AddressService {
         return mapToResponseDto(savedAddress);
     }
 
+    public AddressResponseDto getUserAddressById(UUID userId, UUID addressId) {
+        Address address = addressRepository.findById(addressId)
+                .orElseThrow(() -> new ResourceNotFoundException("Address not found with id: " + addressId));
+
+        if (!address.getUser().getId().equals(userId)) {
+            throw new ResourceNotFoundException("Address does not belong to the given user.");
+        }
+
+        return mapToResponseDto(address);
+    }
+
     public List<AddressResponseDto> getUserAddresses(UUID userId) {
         return addressRepository.findByUserId(userId)
                 .stream()
@@ -68,3 +79,4 @@ public class AddressService {
         );
     }
 }
+

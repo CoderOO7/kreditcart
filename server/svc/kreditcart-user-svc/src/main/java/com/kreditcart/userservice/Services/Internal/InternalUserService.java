@@ -1,4 +1,4 @@
-package com.kreditcart.userservice.Services;
+package com.kreditcart.userservice.Services.Internal;
 
 import com.kreditcart.userservice.Dtos.UserDto;
 import com.kreditcart.userservice.Exceptions.ResourceNotFoundException;
@@ -11,11 +11,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import java.util.UUID;
 
 @Service
-public class UserService {
+public class InternalUserService {
     @Autowired
     UserRepository userRepository;
     public UserDto getUserDetails(@PathVariable UUID id) {
-        User user =  this.userRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException(String.format("User not found with given id %s", id)));
+        User user = this.userRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException(String.format("User not found with given id %s", id)));
         return getUserDtoFromUser(user);
     }
 
@@ -26,5 +27,4 @@ public class UserService {
 //        userDto.setRoles(user.getRoles());
         return userDto;
     }
-
 }
