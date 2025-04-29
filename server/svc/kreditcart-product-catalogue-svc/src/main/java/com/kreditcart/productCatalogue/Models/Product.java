@@ -32,7 +32,4 @@ public class Product extends BaseModel {
     private Category category;
 
     private Boolean isSpecial = false;
-
-    @Column(nullable = false, columnDefinition = "INTEGER DEFAULT 0")
-    private int stock = 0;
 }

@@ -61,7 +61,8 @@ public class ProductController {
             Product product = this.productService.createProduct(payloads);
             return new ResponseEntity<>(product, HttpStatus.OK);
         }catch (Exception exception) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            System.out.printf("createProduct error : %s%n", exception.getMessage());
+            throw exception;
         }
     }
 
@@ -82,7 +83,6 @@ public class ProductController {
         product.setDescription(productDto.getDescription());
         product.setPrice(productDto.getPrice());
         product.setImageUrl(productDto.getImage());
-        product.setStock(productDto.getStock());
         product.setIsSpecial(productDto.getIsSpecial());
         product.setSku(productDto.getSku());
 

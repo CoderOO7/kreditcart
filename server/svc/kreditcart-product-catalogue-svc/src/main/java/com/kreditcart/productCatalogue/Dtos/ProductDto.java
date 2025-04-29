@@ -19,5 +19,4 @@ public class ProductDto {
     private RatingDto ratingDto;
     private Boolean isSpecial = false;
     private String sku;
-    private int stock = 0;
 }
