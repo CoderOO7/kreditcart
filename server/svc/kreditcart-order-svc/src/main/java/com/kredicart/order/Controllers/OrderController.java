@@ -1,5 +1,6 @@
 package com.kredicart.order.Controllers;
 
+import com.kredicart.order.Dtos.OrderResponseDto;
 import com.kredicart.order.Dtos.PlaceOrderRequestDto;
 import com.kredicart.order.Models.Order;
 import com.kredicart.order.Services.OrderService;
@@ -19,8 +20,8 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<Order> placeOrder(@RequestBody PlaceOrderRequestDto order) throws Exception {
-        Order orderRep = this.orderService.placeOrder(order);
+    public ResponseEntity<OrderResponseDto> placeOrder(@RequestBody PlaceOrderRequestDto order) throws Exception {
+        OrderResponseDto orderRep = this.orderService.placeOrder(order);
         return new ResponseEntity(orderRep, HttpStatus.OK);
     }
 }
