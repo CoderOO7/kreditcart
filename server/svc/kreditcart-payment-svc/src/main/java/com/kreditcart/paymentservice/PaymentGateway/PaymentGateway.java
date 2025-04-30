@@ -1,8 +1,8 @@
 package com.kreditcart.paymentservice.PaymentGateway;
 
-import com.razorpay.RazorpayException;
-import com.stripe.exception.StripeException;
+
+import java.util.UUID;
 
 public interface PaymentGateway {
-    String generatePaymentLink(String orderId, String email, String phoneNumber, Long amount);
+    String generatePaymentLink(UUID orderId, String email, String phoneNumber, double amount);
 }

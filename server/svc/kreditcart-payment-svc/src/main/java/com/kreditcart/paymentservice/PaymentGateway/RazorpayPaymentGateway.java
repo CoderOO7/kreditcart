@@ -6,6 +6,8 @@ import org.json.JSONObject;
 import com.razorpay.RazorpayException;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 public class RazorpayPaymentGateway implements PaymentGateway {
     private RazorpayClient razorpayClient;
@@ -14,7 +16,7 @@ public class RazorpayPaymentGateway implements PaymentGateway {
         this.razorpayClient = razorpayClient;
     }
     @Override
-    public String generatePaymentLink(String orderId, String email, String phoneNumber, Long amount)  {
+    public String generatePaymentLink(UUID orderId, String email, String phoneNumber, double amount)  {
         try {
             JSONObject paymentLinkRequest = new JSONObject();
             paymentLinkRequest.put("amount",amount);
