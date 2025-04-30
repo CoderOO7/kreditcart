@@ -10,6 +10,7 @@ import com.kredicart.order.Models.*;
 import com.kredicart.order.Repositories.CurrencyRepository;
 import com.kredicart.order.Repositories.OrderItemRepository;
 import com.kredicart.order.Repositories.OrderRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
@@ -40,6 +41,14 @@ public class OrderServiceImpl implements OrderService {
     private ObjectMapper objectMapper;
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
+
+    @Override
+    @Transactional
+    public OrderResponseDto getOrderById(UUID orderId) throws ResourceNotFoundException {
+        Order order = this.orderRepository.findById(orderId)
+                .orElseThrow(()-> new ResourceNotFoundException(String.format("Order not found with given id %s", orderId)));
+        return this.getOrderResponseDtoFromOrder(order);
+    }
 
     @Override
     public OrderResponseDto placeOrder(PlaceOrderRequestDto placeOrderRequestDto) throws ResourceNotFoundException, OutOfStockException {
@@ -97,10 +106,10 @@ public class OrderServiceImpl implements OrderService {
             }
         }
 
-        return this.getOrderPlaceDtoFromOrder(savedOrder);
+        return this.getOrderResponseDtoFromOrder(savedOrder);
     }
 
-    private OrderResponseDto getOrderPlaceDtoFromOrder(Order order) {
+    private OrderResponseDto getOrderResponseDtoFromOrder(Order order) {
         List<OrderItemResponseDto> itemDtos = order.getItems().stream().map(item -> {
             OrderItemResponseDto dto = new OrderItemResponseDto();
             dto.setId(item.getId());
