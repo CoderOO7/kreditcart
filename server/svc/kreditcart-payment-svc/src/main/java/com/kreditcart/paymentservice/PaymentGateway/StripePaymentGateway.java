@@ -35,8 +35,6 @@ public class StripePaymentGateway implements PaymentGateway {
                     .withAmount(amount)
                     .build();
 
-            System.out.printf("metadata----%s\n",metadata.toString());
-
             PaymentLinkCreateParams params =
                     PaymentLinkCreateParams.builder()
                             .putAllMetadata(metadata)

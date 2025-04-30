@@ -9,7 +9,4 @@ import java.util.UUID;
 @Setter
 public class InitiatePaymentDto {
     private UUID orderId;
-    private String email;
-    private String phoneNumber;
-    private double amount;
 }
