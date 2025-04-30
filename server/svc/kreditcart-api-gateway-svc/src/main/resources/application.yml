@@ -47,6 +47,16 @@ spring:
           predicates:
             - Path=/order-svc/internal/api/**
 
+        - id: payment-service-public
+          uri: lb://KREDITCART-PAYMENT-SVC
+          predicates:
+            - Path=/payment-svc/api/**
+
+        - id: order-service-internal
+          uri: lb://KREDITCART-PAYMENT-SVC
+          predicates:
+            - Path=/payment-svc/internal/api/**
+
 eureka:
   client:
     service-url:
