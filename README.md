@@ -1,5 +1,3 @@
-# kreditcart
-An ecommerce platform 
 # 🛒 Kreditcart - Microservices E-Commerce Backend
 
 Kreditcart is a distributed microservices-based backend system for a scalable e-commerce platform. It uses Spring Boot and Spring Cloud to manage independent services such as product catalog, order processing, inventory, payments, and user management. The system is containerized and ready for cloud deployment with features like centralized API gateway, service discovery, and centralized Swagger UI.
