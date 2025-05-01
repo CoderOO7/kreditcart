@@ -17,6 +17,11 @@ spring:
           predicates:
             - Path=/product-svc/internal/api/**
 
+        - id: product-service-docs
+          uri: lb://KREDITCART-PRODUCT-SVC
+          predicates:
+            - Path=/product-svc/swagger-ui/**, /product-svc/api-docs/**
+
         - id: user-service-public
           uri: lb://KREDITCART-USER-SVC
           predicates:
@@ -26,6 +31,11 @@ spring:
           uri: lb://KREDITCART-USER-SVC
           predicates:
             - Path=/user-svc/internal/api/**
+
+        - id: user-service-docs
+          uri: lb://KREDITCART-USER-SVC
+          predicates:
+            - Path=/user-svc/swagger-ui/**, /user-svc/api-docs/**
 
         - id: inventory-service-public
           uri: lb://KREDITCART-INVENTORY-SVC
@@ -37,6 +47,11 @@ spring:
           predicates:
             - Path=/inventory-svc/internal/api/**
 
+        - id: inventory-service-docs
+          uri: lb://KREDITCART-INVENTORY-SVC
+          predicates:
+            - Path=/inventory-svc/swagger-ui/**, /inventory-svc/api-docs/**
+
         - id: order-service-public
           uri: lb://KREDITCART-ORDER-SVC
           predicates:
@@ -47,17 +62,51 @@ spring:
           predicates:
             - Path=/order-svc/internal/api/**
 
+        - id: order-service-docs
+          uri: lb://KREDITCART-ORDER-SVC
+          predicates:
+            - Path=/order-svc/swagger-ui/**, /order-svc/api-docs/**
+
         - id: payment-service-public
           uri: lb://KREDITCART-PAYMENT-SVC
           predicates:
             - Path=/payment-svc/api/**
 
-        - id: order-service-internal
+        - id: payment-service-internal
           uri: lb://KREDITCART-PAYMENT-SVC
           predicates:
             - Path=/payment-svc/internal/api/**
 
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8761/eureka/
+        - id: payment-service-docs
+          uri: lb://KREDITCART-PAYMENT-SVC
+          predicates:
+            - Path=/payment-svc/swagger-ui/**, /payment-svc/api-docs/**
+
+springdoc:
+  enable-native-support: true
+  api-docs:
+    enabled: true
+    path: /api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    urls:
+      - url: /user-svc/api-docs
+        name: User Service
+        primaryName: User Service
+
+      - url: /product-svc/api-docs
+        name: Product Service
+        primaryName: Product Service
+
+      - url: /inventory-svc/api-docs
+        name: Inventory Service
+        primaryName: Inventory Service
+
+      - url: /order-svc/api-docs
+        name: Order Service
+        primaryName: Order Service
+
+      - url: /payment-svc/api-docs
+        name: Payment Service
+        primaryName: Payment Service
