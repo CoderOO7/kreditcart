@@ -39,8 +39,8 @@ public class ProductServiceStub implements IProductService {
 //        return products.get(id);
     }
 
-    @Override
-    public Product getProductDetails(UUID userId, UUID productId) {
-        return null;
-    }
+//    @Override
+//    public Product getProductDetails(UUID userId, UUID productId) {
+//        return null;
+//    }
 }

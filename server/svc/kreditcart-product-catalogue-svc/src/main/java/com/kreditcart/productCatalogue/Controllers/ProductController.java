@@ -4,7 +4,6 @@ import com.kreditcart.productCatalogue.Dtos.ProductDto;
 import com.kreditcart.productCatalogue.Models.Category;
 import com.kreditcart.productCatalogue.Models.Product;
 import com.kreditcart.productCatalogue.Services.IProductService;
-import jakarta.ws.rs.Path;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -44,15 +43,15 @@ public class ProductController {
         }
     }
 
-    @GetMapping("{id1}/{id2}")
-    public ResponseEntity<Product> getProductDetails(@PathVariable("id1") UUID id1, @PathVariable("id2") UUID id2) {
-        try {
-            Product product = this.productService.getProductDetails(id1, id2);
-            return new ResponseEntity<>(product, HttpStatus.OK);
-        }catch (Exception exception) {
-            throw exception;
-        }
-    }
+//    @GetMapping("{id1}/{id2}")
+//    public ResponseEntity<Product> getProductDetails(@PathVariable("id1") UUID id1, @PathVariable("id2") UUID id2) {
+//        try {
+//            Product product = this.productService.getProductDetails(id1, id2);
+//            return new ResponseEntity<>(product, HttpStatus.OK);
+//        }catch (Exception exception) {
+//            throw exception;
+//        }
+//    }
 
     @PostMapping("")
     public ResponseEntity<Product> createProduct(@RequestBody ProductDto productDto) {

@@ -16,5 +16,5 @@ public interface IProductService {
 
     Product updateProduct(UUID id, Map<String, Object> product);
 
-    Product getProductDetails(UUID userId, UUID productId);
+//    Product getProductDetails(UUID userId, UUID productId);
 }

@@ -69,10 +69,10 @@ public class FakeStoreProductService implements IProductService {
 //        return getProductFromFakeStoreProductDto(this.fakeStoreAPIClient.updateProduct(id, fakeStoreProductDto));
     }
 
-    @Override
-    public Product getProductDetails(UUID userId, UUID productId) {
-        return null;
-    }
+//    @Override
+//    public Product getProductDetails(UUID userId, UUID productId) {
+//        return null;
+//    }
 
     private Product getProductFromFakeStoreProductDto(FakeStoreProductDto productDto) {
         Product product = new Product();

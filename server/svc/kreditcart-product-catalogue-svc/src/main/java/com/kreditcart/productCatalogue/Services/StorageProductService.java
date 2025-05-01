@@ -45,14 +45,14 @@ public class StorageProductService implements IProductService {
     }
 
     // created to test service to service api call using service discovery
-    @Override
-    public Product getProductDetails(UUID userId, UUID productId) {
-        Product product = productRepo.findProductById(productId);
-//        RestTemplate restTemplate =  new RestTemplate();x
-        UserDto userDto = restTemplate.getForEntity("http://userservice/kreditcart-user-svc/users/{id}", UserDto.class, userId).getBody();
-        System.out.println("userEmail:" + userDto.getEmail());
-        return product;
-    }
+//    @Override
+//    public Product getProductDetails(UUID userId, UUID productId) {
+//        Product product = productRepo.findProductById(productId);
+////        RestTemplate restTemplate =  new RestTemplate();x
+//        UserDto userDto = restTemplate.getForEntity("http://userservice/-kreditcart-user-svc/users/{id}", UserDto.class, userId).getBody();
+//        System.out.println("userEmail:" + userDto.getEmail());
+//        return product;
+//    }
 
     @Override
     public Product getProduct(UUID productId) {
