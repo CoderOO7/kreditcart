@@ -4,6 +4,16 @@ Kreditcart is a distributed microservices-based backend system for a scalable e-
 
 ---
 
+## 🚀 Deployment Info
+
+The backend API was deployed temporarily at:
+
+🔗 **[http://13.233.253.181:8080/swagger-ui/index.html](http://13.233.253.181:8080/swagger-ui/index.html)**
+
+⚠️ **Note:** This is hosted on a **free-tier EC2 instance** (t2.micro). Due to high memory usage across multiple services, the instance **crashed under load**. For stable testing or demos, please run the project locally.
+
+---
+
 ## 🚀 Prerequisites
 
 To run or develop this project locally, ensure you have the following installed:
