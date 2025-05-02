@@ -1,0 +1,43 @@
+-- Enable UUID extension
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp" SCHEMA public;
+
+CREATE TABLE roles (
+   id UUID DEFAULT uuid_generate_v4() NOT NULL,
+   is_active BOOLEAN DEFAULT TRUE NOT NULL,
+   created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW() NOT NULL,
+   updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW() NOT NULL,
+   value VARCHAR(100) NOT NULL,
+   CONSTRAINT pk_roles PRIMARY KEY (id)
+);
+ALTER TABLE roles ADD CONSTRAINT uc_roles_value UNIQUE (value);
+
+CREATE TABLE users (
+   id UUID DEFAULT uuid_generate_v4() NOT NULL,
+   is_active BOOLEAN DEFAULT TRUE NOT NULL,
+   created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW() NOT NULL,
+   updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW() NOT NULL,
+   email VARCHAR(255) NOT NULL,
+   password VARCHAR(255) NOT NULL,
+   CONSTRAINT pk_users PRIMARY KEY (id)
+);
+
+CREATE TABLE users_roles (
+   role_id UUID NOT NULL,
+   user_id UUID NOT NULL,
+   CONSTRAINT pk_users_roles PRIMARY KEY (role_id, user_id)
+);
+ALTER TABLE users_roles ADD CONSTRAINT fk_userol_on_role FOREIGN KEY (role_id) REFERENCES roles (id);
+ALTER TABLE users_roles ADD CONSTRAINT fk_userol_on_user FOREIGN KEY (user_id) REFERENCES users (id);
+
+CREATE TABLE user_sessions (
+   id UUID DEFAULT uuid_generate_v4() NOT NULL,
+   is_active BOOLEAN DEFAULT TRUE NOT NULL,
+   created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW() NOT NULL,
+   updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW() NOT NULL,
+   token VARCHAR(255) NOT NULL,
+   expiry_time TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+   user_id UUID NOT NULL,
+   session_status VARCHAR(255) NOT NULL DEFAULT 'ACTIVE',
+   CONSTRAINT pk_user_sessions PRIMARY KEY (id)
+);
+ALTER TABLE user_sessions ADD CONSTRAINT FK_USER_SESSIONS_ON_USER FOREIGN KEY (user_id) REFERENCES users (id);

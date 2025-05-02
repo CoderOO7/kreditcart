@@ -1,0 +1,58 @@
+package com.kredicart.order.Models;
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.List;
+import java.util.UUID;
+
+@Entity
+@Getter
+@Setter
+@Table(name = "orders")
+public class Order extends BaseModel {
+    @Column(nullable = false)
+    private UUID userId;
+
+    @Column(nullable = false)
+    private String orderCode;
+
+    @Column(nullable = false)
+    private double itemsTotalAmount;
+
+    @Column(nullable = false)
+    private double itemsTotalTax;
+
+    @Column(nullable = false)
+    private double serviceCharge; // platform fee
+
+    @Column(nullable = false)
+    private double deliveryCharge;
+
+    @Column(nullable = false)
+    private double discountRate;
+
+    @Column(nullable = false)
+    private double discountAmount;
+
+    @Column(nullable = false)
+    private double grandTotal; // itemsTotalAmount + itemsTotalTax + serviceCharge + deliveryCharge - discountAmount
+
+    @Column(nullable = false)
+    private UUID shippingAddressId;
+
+    @Column(nullable = false)
+    private UUID billingAddressId;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private OrderState state;
+
+    @ManyToOne
+    @JoinColumn(name = "currency_id", nullable = false)
+    private Currency currency;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<OrderItem> items;
+}

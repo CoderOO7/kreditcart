@@ -1,0 +1,55 @@
+-- Enable UUID extension
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp" SCHEMA public;
+
+CREATE TABLE currencies (
+  id UUID DEFAULT uuid_generate_v4() NOT NULL,
+   is_active BOOLEAN DEFAULT TRUE NOT NULL,
+   created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW() NOT NULL,
+   updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW() NOT NULL,
+   name VARCHAR(50) NOT NULL,
+   code VARCHAR(10) NOT NULL,
+   symbol VARCHAR(10) NOT NULL,
+   CONSTRAINT pk_currencies PRIMARY KEY (id)
+);
+ALTER TABLE currencies ADD CONSTRAINT uc_currencies_code UNIQUE (code);
+
+CREATE TABLE orders (
+   id UUID DEFAULT uuid_generate_v4() NOT NULL,
+   is_active BOOLEAN DEFAULT TRUE NOT NULL,
+   created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW() NOT NULL,
+   updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW() NOT NULL,
+   user_id UUID NOT NULL,
+   order_code VARCHAR(255) NOT NULL,
+   items_total_amount DOUBLE PRECISION NOT NULL,
+   items_total_tax DOUBLE PRECISION NOT NULL,
+   service_charge DOUBLE PRECISION NOT NULL,
+   delivery_charge DOUBLE PRECISION NOT NULL,
+   discount_rate DOUBLE PRECISION NOT NULL,
+   discount_amount DOUBLE PRECISION NOT NULL,
+   grand_total DOUBLE PRECISION NOT NULL,
+   state VARCHAR(255) NOT NULL,
+   currency_id UUID NOT NULL,
+   CONSTRAINT pk_orders PRIMARY KEY (id)
+);
+ALTER TABLE orders ADD CONSTRAINT FK_ORDERS_ON_CURRENCY FOREIGN KEY (currency_id) REFERENCES currencies (id);
+
+CREATE TABLE order_items (
+   id UUID DEFAULT uuid_generate_v4() NOT NULL,
+   is_active BOOLEAN DEFAULT TRUE NOT NULL,
+   created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW() NOT NULL,
+   updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW() NOT NULL,
+   product_id UUID NOT NULL,
+   quantity INTEGER NOT NULL,
+   unit_price DOUBLE PRECISION NOT NULL,
+   actual_amount DOUBLE PRECISION NOT NULL,
+   discount_rate DOUBLE PRECISION NOT NULL,
+   discount_amount DOUBLE PRECISION NOT NULL,
+   tax_rate DOUBLE PRECISION NOT NULL,
+   tax_amount DOUBLE PRECISION NOT NULL,
+   total_amount DOUBLE PRECISION NOT NULL,
+   tax_type VARCHAR(255) NOT NULL,
+   state VARCHAR(255) NOT NULL,
+   order_id UUID NOT NULL,
+   CONSTRAINT pk_order_items PRIMARY KEY (id)
+);
+ALTER TABLE order_items ADD CONSTRAINT FK_ORDER_ITEMS_ON_ORDER FOREIGN KEY (order_id) REFERENCES orders (id);
